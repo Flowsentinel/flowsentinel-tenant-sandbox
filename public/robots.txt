@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+# FlowSentinel tenant app — private SaaS portal, not intended for public indexing
