@@ -18,10 +18,6 @@ const SEVERITY_VARIANT = {
   CRITICAL: 'danger', HIGH: 'danger', WARNING: 'warning', INFO: 'info',
 }
 
-const STATUS_VARIANT = {
-  OPEN: 'danger', RESOLVED: 'success', CLOSED: 'neutral', SUPPRESSED: 'neutral',
-}
-
 const TYPE_LABELS = {
   STALE_MAIL:                 'Stale Mail',
   TOKEN_EXPIRY:               'Token Expiry',
@@ -114,7 +110,7 @@ export default function Alerts() {
     queryFn: async () => {
       let q = getTenantClient()
         .from('alerts')
-        .select('id, alert_type, severity, title, message, mailbox_email, status, resolved_at, created_at', { count: 'exact' })
+        .select('id, alert_type, severity, title, message, mailbox_email, created_at', { count: 'exact' })
         .order('created_at', { ascending: false })
         .limit(MAX_ALERTS)
 
@@ -237,7 +233,6 @@ export default function Alerts() {
                   <th className="text-left px-4 py-3 font-medium text-slate-600">Type</th>
                   <th className="text-left px-4 py-3 font-medium text-slate-600">Title</th>
                   <th className="text-left px-4 py-3 font-medium text-slate-600">Mailbox</th>
-                  <th className="text-left px-4 py-3 font-medium text-slate-600">Status</th>
                   <th className="text-left px-4 py-3 font-medium text-slate-600">Created</th>
                 </tr>
               </thead>
@@ -255,9 +250,6 @@ export default function Alerts() {
                       <p className="text-xs text-slate-400 mt-0.5 max-w-xs truncate">{a.message}</p>
                     </td>
                     <td className="px-4 py-3 text-slate-500 text-xs">{a.mailbox_email}</td>
-                    <td className="px-4 py-3">
-                      <Badge variant={STATUS_VARIANT[a.status] ?? 'neutral'}>{a.status}</Badge>
-                    </td>
                     <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">
                       {new Date(a.created_at).toLocaleString()}
                     </td>
