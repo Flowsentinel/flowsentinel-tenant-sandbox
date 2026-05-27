@@ -65,7 +65,7 @@ function getTokenHealth(expiryDate) {
 }
 
 function formatSync(dt) {
-  if (!dt) return 'â€”'
+  if (!dt) return '—'
   const d = new Date(dt)
   return d.toDateString() === new Date().toDateString()
     ? d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -211,7 +211,7 @@ export default function Mailboxes() {
     setRegenError('')
     setRegenStep('generating')
     try {
-      // Mode C: mailbox_id only â€” uses stored token, returns new one if rotated
+      // Mode C: mailbox_id only — uses stored token, returns new one if rotated
       const result = await callTenantFn('graph-validate', { mailbox_id: regenMailbox.id })
       setRegenToken(result.new_refresh_token ?? '')
       setRegenStep('done')
@@ -276,7 +276,7 @@ export default function Mailboxes() {
     const recipients = form.alert_recipients.split(',').map(s => s.trim()).filter(Boolean)
     if (recipients.length === 0) { setAddError('At least one alert recipient is required.'); return }
 
-    // Step 1 â€” Validate credentials with Microsoft
+    // Step 1 — Validate credentials with Microsoft
     setAddStep('validating')
     let validatedToken = form.refresh_token
 
@@ -297,7 +297,7 @@ export default function Mailboxes() {
       return
     }
 
-    // Step 2 â€” Save
+    // Step 2 — Save
     setAddStep('saving')
     createMutation.mutate({
       mailbox_email:           form.mailbox_email,
@@ -341,7 +341,7 @@ export default function Mailboxes() {
           mailbox_email: editMailbox.mailbox_email,
         })
         if (result.new_refresh_token) validatedToken = result.new_refresh_token
-        // result.token_expiry is access token TTL â€” not used for token_expiry_date
+        // result.token_expiry is access token TTL — not used for token_expiry_date
       } catch (e) {
         setEditError(`Microsoft rejected the credentials: ${e.message}`)
         setEditStep('idle')
@@ -376,13 +376,13 @@ export default function Mailboxes() {
   }
 
   // â”€â”€ Step labels â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const addBtnLabel = addStep === 'validating' ? 'Validating with Microsoftâ€¦'
-    : addStep === 'saving' ? 'Savingâ€¦' : 'Connect Mailbox'
+  const addBtnLabel = addStep === 'validating' ? 'Validating with Microsoft...'
+    : addStep === 'saving' ? 'Saving...' : 'Connect Mailbox'
 
-  const editBtnLabel = editStep === 'validating' ? 'Validating with Microsoftâ€¦'
-    : editStep === 'saving' ? 'Savingâ€¦' : 'Save Changes'
+  const editBtnLabel = editStep === 'validating' ? 'Validating with Microsoft...'
+    : editStep === 'saving' ? 'Saving...' : 'Save Changes'
 
-  const tokenBtnLabel = tokenStep === 'saving' ? 'Validating & savingâ€¦' : undefined
+  const tokenBtnLabel = tokenStep === 'saving' ? 'Validating & saving...' : undefined
 
   const activeCount = mailboxes.filter(m => m.is_active).length
 
@@ -411,7 +411,7 @@ export default function Mailboxes() {
         </div>
       ) : (
         <>
-          <p className="text-xs text-slate-400 mb-4">{activeCount} active Â· {config?.max_mailboxes ?? 'â€”'} max</p>
+          <p className="text-xs text-slate-400 mb-4">{activeCount} active · {config?.max_mailboxes ?? '—'} max</p>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {mailboxes.map(mb => {
               const health     = getTokenHealth(mb.token_expiry_date)
@@ -429,7 +429,7 @@ export default function Mailboxes() {
                         <p className="font-semibold text-slate-900 text-sm leading-tight truncate">{mb.mailbox_email}</p>
                         {statusChip(mb.connection_status)}
                       </div>
-                      <p className="text-xs text-slate-400 mt-0.5 font-mono">{mb.ms_client_id?.slice(0, 8)}â€¦</p>
+                      <p className="text-xs text-slate-400 mt-0.5 font-mono">{mb.ms_client_id?.slice(0, 8)}...</p>
                     </div>
                   </div>
 
@@ -496,7 +496,7 @@ export default function Mailboxes() {
                       </button>
                     )}
                     {canEdit && (
-                      <button onClick={() => openToken(mb)} title="Mark as Complete â€” save new token"
+                      <button onClick={() => openToken(mb)} title="Mark as Complete — save new token"
                         className={`p-1.5 rounded-lg transition-colors ${needsToken ? 'text-green-600 hover:bg-green-50' : 'text-slate-400 hover:bg-slate-100'}`}>
                         <CheckCircle2 className="h-4 w-4" />
                       </button>
@@ -622,8 +622,8 @@ export default function Mailboxes() {
                   : 'text-slate-400'
               }`}>
                 {(form.ms_tenant_id !== editMailbox?.ms_tenant_id || form.ms_client_id !== editMailbox?.ms_client_id)
-                  ? '(required â€” Tenant/Client ID changed)'
-                  : '(optional â€” leave blank to keep current)'}
+                  ? '(required — Tenant/Client ID changed)'
+                  : '(optional — leave blank to keep current)'}
               </span>
             </Label>
             <textarea id="edit-token"
@@ -636,7 +636,7 @@ export default function Mailboxes() {
 
           {form.refresh_token.trim() && (
             <div className="space-y-1">
-              <Label htmlFor="edit-expiry">Token Expiry Date <span className="text-slate-400 font-normal">(optional â€” auto-detected by Microsoft)</span></Label>
+              <Label htmlFor="edit-expiry">Token Expiry Date <span className="text-slate-400 font-normal">(optional — auto-detected by Microsoft)</span></Label>
               <Input id="edit-expiry" type="date" disabled={editStep !== 'idle'}
                 value={form.token_expiry_date ?? ''}
                 onChange={e => setForm(p => ({ ...p, token_expiry_date: e.target.value }))} />
@@ -671,7 +671,7 @@ export default function Mailboxes() {
               </p>
             </div>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-1.5">
-              <p className="text-xs font-semibold text-blue-900">Reminder â€” make sure you've also:</p>
+              <p className="text-xs font-semibold text-blue-900">Reminder — make sure you've also:</p>
               <div className="flex items-start gap-2 text-xs text-blue-800">
                 <ArrowRight className="h-3 w-3 shrink-0 mt-0.5" />
                 <span>Updated ReadSoft's backend config with the same refresh token</span>
@@ -696,7 +696,7 @@ export default function Mailboxes() {
               <ol className="text-xs list-decimal list-inside space-y-0.5 ml-1">
                 <li>Re-authenticate in your Microsoft / ReadSoft portal to get a new token</li>
                 <li>Update ReadSoft's backend config with the new token</li>
-                <li>Paste the same token below â€” it will be <strong>validated with Microsoft</strong> before saving</li>
+                <li>Paste the same token below — it will be <strong>validated with Microsoft</strong> before saving</li>
               </ol>
             </div>
             <form onSubmit={handleTokenSubmit} className="space-y-3">
@@ -710,7 +710,7 @@ export default function Mailboxes() {
                   className="block w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:bg-slate-50" />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="token-expiry">Token Expiry Date <span className="text-slate-400 font-normal">(optional â€” auto-detected)</span></Label>
+                <Label htmlFor="token-expiry">Token Expiry Date <span className="text-slate-400 font-normal">(optional — auto-detected)</span></Label>
                 <Input id="token-expiry" type="date" disabled={tokenStep === 'saving'}
                   value={tokenForm.token_expiry_date}
                   onChange={e => setTokenForm(p => ({ ...p, token_expiry_date: e.target.value }))} />
@@ -729,7 +729,7 @@ export default function Mailboxes() {
 
       {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           REGEN TOKEN MODAL
-          Generates a new token using the stored one â€” does NOT save to DB.
+          Generates a new token using the stored one — does NOT save to DB.
           Admin copies the new token, updates ReadSoft, then uses âœ“ to save.
       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <Modal open={!!regenMailbox} onClose={regenStep === 'generating' ? undefined : closeRegen}
@@ -740,7 +740,7 @@ export default function Mailboxes() {
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-2">
                 <p className="text-sm font-medium text-slate-800">How token regeneration works</p>
                 <ol className="text-xs text-slate-600 space-y-1 list-decimal list-inside">
-                  <li>Click <strong>Generate</strong> â€” we use the stored token to get a new one from Microsoft</li>
+                  <li>Click <strong>Generate</strong> — we use the stored token to get a new one from Microsoft</li>
                   <li>Copy the new token and update it in <strong>ReadSoft</strong></li>
                   <li>Come back and click <strong>âœ“ Mark as Complete</strong> to save the new token here</li>
                 </ol>
@@ -761,7 +761,7 @@ export default function Mailboxes() {
                   Cancel
                 </Button>
                 <Button type="button" onClick={handleRegen} disabled={regenStep === 'generating'} loading={regenStep === 'generating'}>
-                  {regenStep === 'generating' ? 'Contacting Microsoftâ€¦' : <><RefreshCw className="h-4 w-4 mr-1.5" />Generate New Token</>}
+                  {regenStep === 'generating' ? 'Contacting Microsoft...' : <><RefreshCw className="h-4 w-4 mr-1.5" />Generate New Token</>}
                 </Button>
               </div>
             </>
@@ -801,7 +801,7 @@ export default function Mailboxes() {
                 </>
               ) : (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-sm font-medium text-blue-800 mb-1">Token validated â€” no rotation needed</p>
+                  <p className="text-sm font-medium text-blue-800 mb-1">Token validated — no rotation needed</p>
                   <p className="text-xs text-blue-700">
                     Microsoft confirmed the stored token is working but did not issue a new one.
                     This is normal for recently-issued tokens. Try again in a few days, or manually
@@ -824,7 +824,7 @@ export default function Mailboxes() {
       <Modal open={!!inboxMailbox} onClose={() => setInboxMailbox(null)}
         title="Inbox Viewer" size="lg">
 
-        {/* Idle â€” show Fetch button */}
+        {/* Idle — show Fetch button */}
         {inboxState === 'idle' && (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mb-4">
@@ -846,7 +846,7 @@ export default function Mailboxes() {
         {inboxState === 'loading' && (
           <div className="flex flex-col items-center justify-center py-12">
             <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-900 border-t-transparent mb-4" />
-            <p className="text-sm text-slate-500">Connecting to mailboxâ€¦</p>
+            <p className="text-sm text-slate-500">Connecting to mailbox...</p>
           </div>
         )}
 
@@ -881,7 +881,7 @@ export default function Mailboxes() {
               ) : (
                 <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 border border-green-200 rounded-full text-xs font-medium text-green-700">
                   <CheckCircle2 className="h-3.5 w-3.5" />
-                  No stale emails â€” inbox looks healthy
+                  No stale emails — inbox looks healthy
                 </div>
               )}
               <button onClick={fetchInbox}
