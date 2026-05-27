@@ -145,8 +145,8 @@ export default function Users() {
   const pwValid = checks.every(c => c.ok)
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 md:p-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <div>
           <h1 className="text-xl font-bold text-slate-900">Users</h1>
           <p className="text-sm text-slate-500 mt-0.5">
@@ -166,8 +166,8 @@ export default function Users() {
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-900 border-t-transparent" />
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="bg-white rounded-xl border border-slate-200 overflow-x-auto">
+          <table className="w-full text-sm min-w-[600px]">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50">
                 <th className="text-left px-4 py-3 font-medium text-slate-600">User</th>

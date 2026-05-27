@@ -1,8 +1,9 @@
-import { NavLink, Link, Outlet, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { NavLink, Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import {
   LayoutDashboard, Mailbox, Users, Settings, LogOut,
-  Bell, UserCircle, HelpCircle, TriangleAlert,
+  Bell, UserCircle, HelpCircle, TriangleAlert, Menu, X,
 } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { useTenantStore } from '@/stores/tenantStore'
@@ -23,7 +24,12 @@ const navItems = [
 export function TenantLayout() {
   const { user, logout, profile } = useAuthStore()
   const { tenantName, clearTenant } = useTenantStore()
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
+  const location  = useLocation()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  // Close drawer on route change
+  useEffect(() => { setSidebarOpen(false) }, [location.pathname])
 
   // Lightweight query just for the license expiry banner
   const { data: licenseInfo } = useQuery({
@@ -50,22 +56,34 @@ export function TenantLayout() {
 
   const { showWarning, secondsLeft, keepAlive } = useIdleTimer({ onLogout: handleLogout })
 
-  // Initials avatar from full name or email
   const displayName = profile?.full_name ?? user?.email ?? ''
   const initials    = displayName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-  const roleName    = tenantName ?? profile?.role?.replace('_', ' ').toLowerCase() ?? ''
-
-  const visibleNav = navItems.filter(({ roles }) => !roles || roles.includes(profile?.role))
+  const visibleNav  = navItems.filter(({ roles }) => !roles || roles.includes(profile?.role))
 
   return (
     <div className="flex h-screen bg-slate-100 overflow-hidden">
 
-      {/* ── Sidebar ─────────────────────────────────────────────────────────── */}
-      <aside className="w-56 flex flex-col shrink-0" style={{ background: '#0d1526' }}>
+      {/* ── Mobile backdrop ─────────────────────────────────────────────────── */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
+      {/* ── Sidebar ─────────────────────────────────────────────────────────── */}
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-40 flex flex-col w-64 shrink-0
+          transition-transform duration-300 ease-in-out
+          md:relative md:w-56 md:z-auto md:translate-x-0
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}
+        style={{ background: '#0d1526' }}
+      >
         {/* Brand */}
-        <div className="px-4 py-5 border-b border-white/5">
-          <div className="flex items-center gap-2.5">
+        <div className="px-4 py-5 border-b border-white/5 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
             <img src="/icon.svg" alt="FlowSentinel" className="h-8 w-8 shrink-0" />
             <div className="min-w-0">
               <p className="font-semibold text-white text-sm leading-tight tracking-tight">FlowSentinel</p>
@@ -74,6 +92,12 @@ export function TenantLayout() {
               </p>
             </div>
           </div>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="md:hidden shrink-0 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
 
         {/* Nav */}
@@ -112,14 +136,11 @@ export function TenantLayout() {
         {/* User footer */}
         <div className="border-t border-white/5 px-2.5 py-3">
           <div className="flex items-center gap-2.5 px-2">
-            {/* Avatar */}
             <Link to="/profile" className="shrink-0">
               <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold">
                 {initials || '?'}
               </div>
             </Link>
-
-            {/* Name + role */}
             <Link to="/profile" className="min-w-0 flex-1 group">
               <p className="text-xs font-semibold text-white truncate leading-tight group-hover:text-indigo-300 transition-colors">
                 {displayName}
@@ -128,8 +149,6 @@ export function TenantLayout() {
                 {profile?.role?.replace('_', ' ').toLowerCase() ?? ''}
               </p>
             </Link>
-
-            {/* Logout */}
             <button
               onClick={handleLogout}
               title="Sign out"
@@ -142,14 +161,28 @@ export function TenantLayout() {
       </aside>
 
       {/* ── Main ────────────────────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+
+        {/* Mobile top bar */}
+        <div className="md:hidden flex items-center justify-between px-4 py-3 shrink-0 border-b border-white/5" style={{ background: '#0d1526' }}>
+          <div className="flex items-center gap-2.5">
+            <img src="/icon.svg" alt="FlowSentinel" className="h-7 w-7" />
+            <span className="font-semibold text-white text-sm">FlowSentinel</span>
+          </div>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="text-slate-300 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
 
         {/* License expiry banner */}
         {showBanner && (
-          <div className="flex items-center justify-between gap-4 bg-amber-50 border-b border-amber-200 px-6 py-2.5 shrink-0">
+          <div className="flex items-center justify-between gap-4 bg-amber-50 border-b border-amber-200 px-4 md:px-6 py-2.5 shrink-0">
             <div className="flex items-center gap-2 text-amber-800 text-sm">
               <TriangleAlert className="h-4 w-4 text-amber-500 shrink-0" />
-              <span>
+              <span className="text-xs md:text-sm">
                 Your license {daysLeft > 0
                   ? `expires in ${daysLeft} day${daysLeft !== 1 ? 's' : ''}. Renew now to avoid interruption.`
                   : 'has expired. Please renew immediately.'}
@@ -159,7 +192,7 @@ export function TenantLayout() {
               onClick={() => navigate('/settings')}
               className="shrink-0 text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg transition-colors"
             >
-              Renew license
+              Renew
             </button>
           </div>
         )}
@@ -170,7 +203,7 @@ export function TenantLayout() {
         </main>
       </div>
 
-      {/* Inactivity warning — shown after 10 min idle, auto-logs out after 5 more min */}
+      {/* Inactivity warning */}
       {showWarning && (
         <IdleWarningModal
           secondsLeft={secondsLeft}
