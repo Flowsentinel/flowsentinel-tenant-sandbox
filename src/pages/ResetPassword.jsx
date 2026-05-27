@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Eye, EyeOff, CheckCircle2, XCircle } from 'lucide-react'
 import { useTenantStore } from '@/stores/tenantStore'
-import { validatePassword } from '@ap-monitor/shared/validation'
+import { validatePassword } from '@/lib/validation'
 
 export default function ResetPassword() {
   const navigate = useNavigate()
