@@ -51,16 +51,14 @@ export default function VerifyOtp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#f0eeff' }}>
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-100">
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8">
 
-        {/* Logo */}
-        <div className="flex justify-center mb-6">
-          <img src="/logo_login.svg" alt="FlowSentinel" className="h-20" />
-        </div>
-
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-7">
+          {/* Logo */}
+          <div className="flex justify-center mb-6">
+            <img src="/logo_login.svg" alt="FlowSentinel" className="h-16" />
+          </div>
           <p className="text-center text-slate-500 text-sm mb-1">
             Enter verification code
           </p>

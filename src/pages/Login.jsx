@@ -65,36 +65,35 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#f0eeff' }}>
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-100">
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8">
 
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-6">
-          <img src="/logo_login.svg" alt="FlowSentinel" className="h-20" />
-          {tenantName && (
-            <div className="flex items-center gap-2 mt-3">
-              <span className="text-sm font-medium text-violet-700 bg-violet-100 px-3 py-0.5 rounded-full">
-                {tenantName}
-              </span>
-              <button
-                onClick={handleChangeCompany}
-                className="text-xs text-slate-400 hover:text-slate-600 underline transition-colors"
-              >
-                Change
-              </button>
-            </div>
-          )}
-        </div>
+          {/* Logo */}
+          <div className="flex flex-col items-center mb-6">
+            <img src="/logo_login.svg" alt="FlowSentinel" className="h-16" />
+            {tenantName && (
+              <div className="flex items-center gap-2 mt-3">
+                <span className="text-sm font-medium text-violet-700 bg-violet-50 px-3 py-0.5 rounded-full border border-violet-100">
+                  {tenantName}
+                </span>
+                <button
+                  onClick={handleChangeCompany}
+                  className="text-xs text-slate-400 hover:text-slate-600 underline transition-colors"
+                >
+                  Change
+                </button>
+              </div>
+            )}
+          </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-7">
           <p className="text-center text-slate-500 text-sm mb-6">
             Sign in to your account
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-slate-800">
+              <label className="block text-sm font-semibold text-slate-700">
                 Email address
               </label>
               <input
@@ -109,7 +108,7 @@ export default function Login() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-slate-800">
+              <label className="block text-sm font-semibold text-slate-700">
                 Password
               </label>
               <div className="relative">
@@ -156,8 +155,8 @@ export default function Login() {
               </Link>
             </div>
           </form>
-        </div>
 
+        </div>
       </div>
     </div>
   )

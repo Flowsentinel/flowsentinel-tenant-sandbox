@@ -65,23 +65,22 @@ export default function CompanyCode() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#f0eeff' }}>
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-100">
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8">
 
-        {/* Logo */}
-        <div className="flex justify-center mb-6">
-          <img src="/logo_login.svg" alt="FlowSentinel" className="h-20" />
-        </div>
+          {/* Logo */}
+          <div className="flex justify-center mb-6">
+            <img src="/logo_login.svg" alt="FlowSentinel" className="h-16" />
+          </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-7">
           <p className="text-center text-slate-500 text-sm mb-6">
             Enter your company code to continue
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-slate-800">
+              <label className="block text-sm font-semibold text-slate-700">
                 Company code
               </label>
               <div className="relative">
@@ -116,8 +115,18 @@ export default function CompanyCode() {
               )}
             </button>
           </form>
-        </div>
 
+          <div className="mt-6 pt-5 border-t border-slate-100 text-center">
+            <p className="text-sm text-slate-400">New customer?</p>
+            <button
+              onClick={() => navigate('/activate')}
+              className="text-sm text-violet-600 hover:text-violet-700 font-medium transition-colors"
+            >
+              Activate a license key
+            </button>
+          </div>
+
+        </div>
       </div>
     </div>
   )
