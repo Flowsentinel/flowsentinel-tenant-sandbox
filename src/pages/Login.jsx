@@ -42,15 +42,24 @@ export default function Login() {
       const accessToken = data.session.access_token
 
       let profile = null
+      let isNewUser = false
       try {
         const result = await callTenantFnWithToken('user-bootstrap', {}, accessToken)
         profile = result.profile
+        isNewUser = result.is_new_user ?? false
       } catch {
         // Non-fatal
       }
 
-      const { data: { session: freshSession } } = await client.auth.refreshSession()
-      setSession(freshSession ?? data.session, profile)
+      // Only refresh the session for brand-new users — they need an updated JWT
+      // with app_metadata.role baked in. Returning users already have it.
+      let finalSession = data.session
+      if (isNewUser) {
+        const { data: { session: freshSession } } = await client.auth.refreshSession()
+        if (freshSession) finalSession = freshSession
+      }
+
+      setSession(finalSession, profile)
       navigate('/dashboard', { replace: true })
     } catch {
       setError('An unexpected error occurred. Please try again.')
