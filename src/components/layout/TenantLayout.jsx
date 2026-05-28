@@ -3,7 +3,7 @@ import { NavLink, Link, Outlet, useNavigate, useLocation } from 'react-router-do
 import { useQuery } from '@tanstack/react-query'
 import {
   LayoutDashboard, Mailbox, Users, Settings, LogOut,
-  Bell, UserCircle, TriangleAlert, Menu, X,
+  Bell, UserCircle, HelpCircle, TriangleAlert, Menu, X,
 } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { useTenantStore } from '@/stores/tenantStore'
