@@ -3,7 +3,7 @@ import { NavLink, Link, Outlet, useNavigate, useLocation } from 'react-router-do
 import { useQuery } from '@tanstack/react-query'
 import {
   LayoutDashboard, Mailbox, Users, Settings, LogOut,
-  Bell, UserCircle, HelpCircle, TriangleAlert, Menu, X,
+  Bell, UserCircle, TriangleAlert, Menu, X,
 } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { useTenantStore } from '@/stores/tenantStore'
@@ -18,7 +18,6 @@ const navItems = [
   { to: '/users',      icon: Users,            label: 'Users',   roles: ['SUPER_ADMIN'] },
   { to: '/settings',   icon: Settings,         label: 'Settings',      roles: ['SUPER_ADMIN', 'ADMIN'] },
   { to: '/profile',    icon: UserCircle,       label: 'My Profile',    roles: null },
-  { to: '/support',    icon: HelpCircle,       label: 'Support',       roles: null },
 ]
 
 export function TenantLayout() {
