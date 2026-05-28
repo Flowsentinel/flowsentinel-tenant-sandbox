@@ -730,7 +730,7 @@ export default function Mailboxes() {
       {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           REGEN TOKEN MODAL
           Generates a new token using the stored one — does NOT save to DB.
-          Admin copies the new token, updates ReadSoft, then uses âœ“ to save.
+          Admin copies the new token, updates ReadSoft, then uses ✓ to save.
       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <Modal open={!!regenMailbox} onClose={regenStep === 'generating' ? undefined : closeRegen}
         title="Regenerate Refresh Token">
@@ -742,7 +742,7 @@ export default function Mailboxes() {
                 <ol className="text-xs text-slate-600 space-y-1 list-decimal list-inside">
                   <li>Click <strong>Generate</strong> — we use the stored token to get a new one from Microsoft</li>
                   <li>Copy the new token and update it in <strong>ReadSoft</strong></li>
-                  <li>Come back and click <strong>âœ“ Mark as Complete</strong> to save the new token here</li>
+                  <li>Come back and click <strong>✓ Mark as Complete</strong> to save the new token here</li>
                 </ol>
               </div>
 
@@ -783,7 +783,7 @@ export default function Mailboxes() {
                             ? 'bg-green-100 text-green-700'
                             : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}>
-                        {regenCopied ? 'âœ“ Copied!' : 'Copy'}
+                        {regenCopied ? '✓ Copied!' : 'Copy'}
                       </button>
                     </div>
                     <textarea readOnly value={regenToken} rows={4}
@@ -795,7 +795,7 @@ export default function Mailboxes() {
                     <ol className="text-xs text-amber-800 list-decimal list-inside space-y-0.5">
                       <li>Copy the token above</li>
                       <li>Paste it into ReadSoft's configuration</li>
-                      <li>Close this and click <strong>âœ“</strong> on the mailbox card to save it here</li>
+                      <li>Close this and click <strong>✓</strong> on the mailbox card to save it here</li>
                     </ol>
                   </div>
                 </>
@@ -951,7 +951,7 @@ export default function Mailboxes() {
                     {totalPages > 1 && (
                       <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
                         <span>
-                          {inboxPage * INBOX_PAGE_SIZE + 1}â€“{Math.min((inboxPage + 1) * INBOX_PAGE_SIZE, inboxResult.emails.length)} of {inboxResult.emails.length}
+                          {inboxPage * INBOX_PAGE_SIZE + 1}–{Math.min((inboxPage + 1) * INBOX_PAGE_SIZE, inboxResult.emails.length)} of {inboxResult.emails.length}
                         </span>
                         <div className="flex items-center gap-2">
                           <Button variant="outline" disabled={inboxPage === 0}
