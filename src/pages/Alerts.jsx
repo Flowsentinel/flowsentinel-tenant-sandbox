@@ -37,16 +37,21 @@ const TYPE_OPTIONS     = ['ALL', ...Object.keys(TYPE_LABELS)]
 // ── CSV export ────────────────────────────────────────────────────────────────
 function exportCSV(alerts) {
   const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`
-  const header = ['Created', 'Severity', 'Type', 'Title', 'Message', 'Mailbox', 'Status']
-  const rows = alerts.map(a => [
-    new Date(a.created_at).toLocaleString(),
-    a.severity,
-    TYPE_LABELS[a.alert_type] ?? a.alert_type,
-    esc(a.title),
-    esc(a.message),
-    a.mailbox_email ?? '',
-    a.status,
-  ].join(','))
+  const header = ['Date', 'Time', 'Severity', 'Type', 'Title', 'Message', 'Mailbox']
+  const rows = alerts.map(a => {
+    const d = new Date(a.created_at)
+    const date = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    return [
+      date,
+      time,
+      a.severity,
+      TYPE_LABELS[a.alert_type] ?? a.alert_type,
+      esc(a.title),
+      esc(a.message),
+      a.mailbox_email ?? '',
+    ].join(',')
+  })
   const csv  = [header.join(','), ...rows].join('\r\n')
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
   const url  = URL.createObjectURL(blob)
@@ -229,32 +234,37 @@ export default function Alerts() {
             <table className="w-full text-sm min-w-[640px]">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50">
+                  <th className="text-left px-4 py-3 font-medium text-slate-600">Date</th>
+                  <th className="text-left px-4 py-3 font-medium text-slate-600">Time</th>
                   <th className="text-left px-4 py-3 font-medium text-slate-600">Severity</th>
                   <th className="text-left px-4 py-3 font-medium text-slate-600">Type</th>
                   <th className="text-left px-4 py-3 font-medium text-slate-600">Title</th>
                   <th className="text-left px-4 py-3 font-medium text-slate-600">Mailbox</th>
-                  <th className="text-left px-4 py-3 font-medium text-slate-600">Created</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {pageAlerts.map(a => (
-                  <tr key={a.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-4 py-3">
-                      <Badge variant={SEVERITY_VARIANT[a.severity] ?? 'neutral'}>{a.severity}</Badge>
-                    </td>
-                    <td className="px-4 py-3 text-slate-600 text-xs">
-                      {TYPE_LABELS[a.alert_type] ?? a.alert_type}
-                    </td>
-                    <td className="px-4 py-3">
-                      <p className="font-medium text-slate-900">{a.title}</p>
-                      <p className="text-xs text-slate-400 mt-0.5 max-w-xs truncate">{a.message}</p>
-                    </td>
-                    <td className="px-4 py-3 text-slate-500 text-xs">{a.mailbox_email}</td>
-                    <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">
-                      {new Date(a.created_at).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
+                {pageAlerts.map(a => {
+                  const d = new Date(a.created_at)
+                  const date = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                  const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                  return (
+                    <tr key={a.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">{date}</td>
+                      <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">{time}</td>
+                      <td className="px-4 py-3">
+                        <Badge variant={SEVERITY_VARIANT[a.severity] ?? 'neutral'}>{a.severity}</Badge>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600 text-xs">
+                        {TYPE_LABELS[a.alert_type] ?? a.alert_type}
+                      </td>
+                      <td className="px-4 py-3">
+                        <p className="font-medium text-slate-900">{a.title}</p>
+                        <p className="text-xs text-slate-400 mt-0.5 max-w-xs truncate">{a.message}</p>
+                      </td>
+                      <td className="px-4 py-3 text-slate-500 text-xs">{a.mailbox_email}</td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>

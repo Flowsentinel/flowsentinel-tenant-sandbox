@@ -86,7 +86,7 @@ export default function Dashboard() {
             />
             <StatCard
               icon={AlertTriangle}
-              label="Open Alerts"
+              label="Alerts"
               value={stats?.openAlerts}
               color={stats?.openAlerts > 0 ? 'amber' : 'green'}
             />
