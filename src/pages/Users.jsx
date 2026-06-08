@@ -39,7 +39,7 @@ const EMPTY_FORM = { email: '', full_name: '', role: 'ADMIN', password: '' }
 export default function Users() {
   const qc = useQueryClient()
   const { profile: myProfile } = useAuthStore()
-  const isSuperAdmin = myProfile?.role === 'SUPER_ADMIN'
+  const canManageUsers = ['SUPER_ADMIN', 'ADMIN'].includes(myProfile?.role)
 
   const [addOpen, setAddOpen] = useState(false)
   const [editUser, setEditUser] = useState(null)
@@ -153,7 +153,7 @@ export default function Users() {
             {users.length} / {config?.max_users ?? '—'} users
           </p>
         </div>
-        {isSuperAdmin && (
+        {canManageUsers && (
           <Button onClick={openAdd}>
             <Plus className="h-4 w-4 mr-1.5" />
             Add User
@@ -174,7 +174,7 @@ export default function Users() {
                 <th className="text-left px-4 py-3 font-medium text-slate-600">Role</th>
                 <th className="text-left px-4 py-3 font-medium text-slate-600">Status</th>
                 <th className="text-left px-4 py-3 font-medium text-slate-600">Added</th>
-                {isSuperAdmin && <th className="text-right px-4 py-3 font-medium text-slate-600">Actions</th>}
+                {canManageUsers && <th className="text-right px-4 py-3 font-medium text-slate-600">Actions</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -198,7 +198,7 @@ export default function Users() {
                     <td className="px-4 py-3 text-slate-500">
                       {new Date(u.created_at).toLocaleDateString()}
                     </td>
-                    {isSuperAdmin && (
+                    {canManageUsers && (
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-end gap-1">
                           {!isMe && u.role !== 'SUPER_ADMIN' && (
