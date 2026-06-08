@@ -32,7 +32,7 @@ export const router = createBrowserRouter([
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'alerts',    element: <Alerts /> },
       { path: 'mailboxes', element: <ProtectedRoute requiredRoles={['SUPER_ADMIN', 'ADMIN', 'READ_ONLY']}><Mailboxes /></ProtectedRoute> },
-      { path: 'users',     element: <ProtectedRoute requiredRoles={['SUPER_ADMIN']}><Users /></ProtectedRoute> },
+      { path: 'users',     element: <ProtectedRoute requiredRoles={['SUPER_ADMIN', 'ADMIN']}><Users /></ProtectedRoute> },
       { path: 'settings',  element: <ProtectedRoute requiredRoles={['SUPER_ADMIN', 'ADMIN']}><Settings /></ProtectedRoute> },
       { path: 'profile',   element: <Profile /> },
       { path: 'support',   element: <Support /> },

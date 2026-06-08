@@ -15,7 +15,7 @@ const navItems = [
   { to: '/dashboard',  icon: LayoutDashboard, label: 'Dashboard',     roles: null },
   { to: '/mailboxes',  icon: Mailbox,          label: 'Mailboxes',     roles: ['SUPER_ADMIN', 'ADMIN', 'READ_ONLY'] },
   { to: '/alerts',     icon: Bell,             label: 'Alert History', roles: null },
-  { to: '/users',      icon: Users,            label: 'Users',   roles: ['SUPER_ADMIN'] },
+  { to: '/users',      icon: Users,            label: 'Users',   roles: ['SUPER_ADMIN', 'ADMIN'] },
   { to: '/settings',   icon: Settings,         label: 'Settings',      roles: ['SUPER_ADMIN', 'ADMIN'] },
   { to: '/profile',    icon: UserCircle,       label: 'My Profile',    roles: null },
 ]
