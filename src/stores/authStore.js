@@ -31,12 +31,25 @@ export const useAuthStore = create(
         } catch {
           // client may not be initialised — still clear state
         }
+        localStorage.removeItem('fs-last-active')
         useTenantStore.getState().clearTenant()
         set({ session: null, user: null, profile: null, isAuthenticated: false })
       },
 
       init: async () => {
         useTenantStore.getState().rehydrateClient()
+
+        // If the window was closed and reopened after 15 min of inactivity, treat
+        // it as an expired session — don't restore even if the Supabase token is
+        // still technically valid.
+        const lastActive = localStorage.getItem('fs-last-active')
+        if (lastActive && Date.now() - Number(lastActive) > 15 * 1000) {
+          localStorage.removeItem('fs-last-active')
+          try { await getTenantClient().auth.signOut() } catch { /* ignore */ }
+          useTenantStore.getState().clearTenant()
+          set({ session: null, user: null, profile: null, isAuthenticated: false, isLoading: false })
+          return
+        }
 
         try {
           const client = getTenantClient()

@@ -17,7 +17,12 @@ export function IdleWarningModal({ secondsLeft, onKeepAlive, onLogout }) {
   const pct = Math.max(0, Math.min(100, (secondsLeft / (5 * 60)) * 100))
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      onMouseDown={e => e.stopPropagation()}
+      onKeyDown={e => e.stopPropagation()}
+      onTouchStart={e => e.stopPropagation()}
+    >
       {/* Backdrop — intentionally not clickable to dismiss (requires explicit action) */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 

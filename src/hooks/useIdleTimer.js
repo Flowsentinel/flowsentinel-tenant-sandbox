@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 
-const IDLE_MS   = 10 * 60 * 1000   // 10 minutes until the warning appears
-const WARNING_S = 5  * 60          // 5-minute countdown (in seconds)
+// const IDLE_MS   = 10 * 60 * 1000   // 10 minutes until the warning appears
+// const WARNING_S = 5  * 60          // 5-minute countdown (in seconds)
+
+const IDLE_MS   = 15 * 1000  // ← testing value; restore to 10 * 60 * 1000 for production
+const WARNING_S = 10         // ← testing value; restore to 5 * 60 for production
 
 /**
  * Tracks user inactivity.
@@ -48,6 +51,7 @@ export function useIdleTimer({ onLogout }) {
   }, [stopCountdown])
 
   const resetTimer = useCallback(() => {
+    localStorage.setItem('fs-last-active', Date.now().toString())
     setShowWarning(false)
     stopCountdown()
     clearTimeout(warnTimerRef.current)
@@ -57,7 +61,9 @@ export function useIdleTimer({ onLogout }) {
   }, [startCountdown, stopCountdown])
 
   useEffect(() => {
-    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll']
+    // mousemove intentionally excluded — moving the mouse should not reset the
+    // idle timer or dismiss the warning dialog
+    const events = ['mousedown', 'keydown', 'touchstart', 'scroll']
     events.forEach(e => window.addEventListener(e, resetTimer, { passive: true }))
     resetTimer() // kick off the first timer on mount
     return () => {
