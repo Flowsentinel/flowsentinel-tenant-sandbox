@@ -53,9 +53,10 @@ export default function Activate() {
       // 1. Validate license + store project details in registry
       const data = await activateTenant({
         companyCode,
-        licenseKey: form.licenseKey.trim(),
-        projectUrl: form.projectUrl.trim(),
-        anonKey: form.anonKey.trim(),
+        licenseKey:       form.licenseKey.trim(),
+        projectUrl:       form.projectUrl.trim(),
+        anonKey:          form.anonKey.trim(),
+        superAdminEmail:  form.adminEmail.trim().toLowerCase(),
       })
 
       // 2. Initialize tenant Supabase client
@@ -88,7 +89,8 @@ export default function Activate() {
         password: form.adminPassword,
       })
 
-      if (signUpErr) {
+      // "User already registered" is fine — activation succeeded, just go to login
+      if (signUpErr && !signUpErr.message?.toLowerCase().includes('already registered')) {
         setError(`Account created but user setup failed: ${signUpErr.message}. You can log in if email confirmation was sent.`)
         return
       }

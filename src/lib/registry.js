@@ -19,11 +19,12 @@ export async function resolveTenant(companyCode) {
   return callRegistry('resolve-tenant', { company_code: companyCode })
 }
 
-export async function activateTenant({ companyCode, licenseKey, projectUrl, anonKey }) {
+export async function activateTenant({ companyCode, licenseKey, projectUrl, anonKey, superAdminEmail }) {
   return callRegistry('tenant-activate', {
-    company_code: companyCode,
-    license_key: licenseKey,
-    project_url: projectUrl,
-    anon_key: anonKey,
+    company_code:      companyCode,
+    license_key:       licenseKey,
+    project_url:       projectUrl,
+    anon_key:          anonKey,
+    super_admin_email: superAdminEmail ?? null,
   })
 }
