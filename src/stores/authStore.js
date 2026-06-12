@@ -43,7 +43,7 @@ export const useAuthStore = create(
         // it as an expired session — don't restore even if the Supabase token is
         // still technically valid.
         const lastActive = localStorage.getItem('fs-last-active')
-        if (lastActive && Date.now() - Number(lastActive) > 15 * 1000) {
+        if (lastActive && Date.now() - Number(lastActive) > 15 * 60 * 1000) {
           localStorage.removeItem('fs-last-active')
           try { await getTenantClient().auth.signOut() } catch { /* ignore */ }
           useTenantStore.getState().clearTenant()

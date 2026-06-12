@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 
-// const IDLE_MS   = 10 * 60 * 1000   // 10 minutes until the warning appears
-// const WARNING_S = 5  * 60          // 5-minute countdown (in seconds)
-
-const IDLE_MS   = 15 * 1000  // ← testing value; restore to 10 * 60 * 1000 for production
-const WARNING_S = 10         // ← testing value; restore to 5 * 60 for production
+const IDLE_MS   = 10 * 60 * 1000   // 10 minutes until the warning appears
+const WARNING_S = 5  * 60          // 5-minute countdown (in seconds)
 
 /**
  * Tracks user inactivity.
